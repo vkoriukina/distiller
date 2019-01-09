@@ -33,7 +33,6 @@ from .policy import ScheduledTrainingPolicy
 import distiller
 from distiller import normalize_module_name, denormalize_module_name
 from apputils import SummaryGraph
-from models import create_model
 msglogger = logging.getLogger(__name__)
 
 ThinningRecipe = namedtuple('ThinningRecipe', ['modules', 'parameters'])
@@ -71,7 +70,7 @@ def create_graph(dataset, arch):
         dummy_input = torch.randn((1, 3, 32, 32), requires_grad=False)
     assert dummy_input is not None, "Unsupported dataset ({}) - aborting draw operation".format(dataset)
 
-    model = create_model(False, dataset, arch, parallel=False)
+    model = models.create_model(False, dataset, arch, parallel=False)
     assert model is not None
     dummy_input = dummy_input.to(distiller.model_device(model))
     return SummaryGraph(model, dummy_input)
